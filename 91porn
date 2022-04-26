@@ -1,0 +1,298 @@
+// ==UserScript==
+// @name         91porn 解锁VIP观看高清下载搜索等限制,去除广告.
+// @version      0.1
+// @description  解锁VIP观看下载搜索限制,去除广告等
+// @author       @chunv_bot
+// @supportURL   https://t.me/chunv_bot
+// @antifeature  tracking ============================================>>> 说明：当前脚本使用官方统计了解用户安装数量。这个操作仅会收集您的使用信息，不包含您鼠标、键盘点击在内的所有操作，没有任何安全风险，不会产生性能损耗。为了保护您的知情权以及使用体验，特告知于您。代码开源可审计，请您放心安装。 <<<============================================
+// @require      https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js
+// @match        *.91porn.com/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=91porn.com
+// @grant        unsafeWindow
+// @grant        GM_xmlhttpRequest
+// @license      AGPL-3.0
+// ==/UserScript==
+function playvideo() {
+    $.ajax({
+        url:"http://"+ window.location.host +"/api/playvideo.html",
+        type:"post",
+        data:{id:window.location.href.match(/\/([0-9]+)\./)[1]},
+        success:function(e){
+            e = JSON.parse(e);
+            $(".share").html('<p></p><p>'+e.data.videoInfo.url.split("?")[0]+'</p>');
+            if(e.message == "\u89c6\u9891\u9700\u8981\u4ed8\u8d39\u002c\u8bf7\u767b\u9646\u540e\u89c2\u770b"){
+                console.log(e.data.videoInfo.url);
+                $("body").append("<style>.layui-layer-shade,.layui-layer-dialog,.layui-layer-move{display:none}</style>");
+                new ckplayer({container:"#playerBox",autoplay:true,video:e.data.videoInfo.url});
+            }
+        }
+    });
+};
+function InjectRawElement()
+{
+    var VideoElement = ``
+}
+unsafeWindow.EnableSkipButton_Skip = function EnableSkipButton_Skip()//启用跳过广告的按钮并且自动跳过，这里使用unsafe暴露内置函数
+{
+    var SkipButton_Per_DisableCName = "preroll-skip-button";//没启用之前的类名
+    var SkipButton_Per_EnableCName = "preroll-skip-button enabled";//没启用之前的类名
+    var Skip_DisabledElem = document.getElementsByClassName(SkipButton_Per_DisableCName);
+    if(Skip_DisabledElem.length>0)
+    {
+        Skip_DisabledElem[0].className = SkipButton_Per_EnableCName;
+        Skip_DisabledElem[0].click();
+        console.log("success：感谢播放按钮送来的事件，已经成功被执行了");
+    }
+    else
+    {
+        console.log("err...：没有找到广告跳过按钮");
+    }
+}
+function DeleagePlayBtnClickEvent()//委托播放按钮来执行代码
+{
+        var PlayVideoButton = document.getElementsByClassName("vjs-big-play-button");
+        if(PlayVideoButton.length>0)
+        {
+            PlayVideoButton[0].setAttribute("onclick","EnableSkipButton_Skip()");
+            console.log("success：成功委托播放按钮执行注入代码");
+        }
+    else
+    {
+        console.log("err...：没有找到网站的播放按钮")
+    }
+}
+
+function RemovePipWindow()//移除小窗
+{
+  var PipElem_Close = document.getElementsByClassName("vjs-pip-close")[0];//
+    if(PipElem_Close!=undefined)
+    {
+        PipElem_Close.click();//表示已经关闭
+        document.onmousewheel = ()=>{};//执行之后不需要继续监听
+        console.log("已经关闭小窗，停止监听");
+    }
+    else
+    {
+        console.log("检测到鼠标滚动，没有探测到区域内小窗...");
+    }
+}
+function GetVideoM3U8Link()
+{
+    var Source_Name = "source";
+    var LinkTag = document.getElementsByTagName(Source_Name);
+    var LinkText;
+    if(LinkTag.length>0)
+    {
+        LinkText = LinkTag[0].src;//获取文件链接
+        console.log("获取链接成功...，地址为："+LinkText);//确认是否失效，对此处进行一次输出
+    }
+    else
+    {
+        LinkText = "";
+        console.log("获取链接失败...可能是标签位置已经改变");
+    }
+    return LinkText;//返回地址待用
+}
+function Toast_Success()//对部分地址进行注入，提示用户脚本写入成功
+{
+    var VideoHlsLink = GetVideoM3U8Link();
+    var M3U8DownloadLink = ""+VideoHlsLink;//最后下载的链接指向
+    var Tips_Ele = document.getElementsByClassName("boxPart")[0];
+    if(Tips_Ele!=undefined)
+    {
+        Tips_Ele.setAttribute("style","font-size:22px;color:#ff8800");
+        Tips_Ele.textContent = "全局脚本预注入成功";//提示注入成功
+        var DownLoadAreaInfo=document.evaluate('//*[@id="videodetails-content"]/a[1]').iterateNext();
+        if(DownLoadAreaInfo!=undefined)
+        {
+            DownLoadAreaInfo.removeAttribute("href");
+            DownLoadAreaInfo.setAttribute("style","font-size:25px;color:white");
+            DownLoadAreaInfo.textContent="";
+            DownLoadAreaInfo.onclick = ()=>{scrollTo({top:document.body.scrollHeight,left:0})};//滚动到底部
+        }
+       var DownLoadAreaInfo2=document.evaluate("//div[@class='floatmenu'][4]").iterateNext();
+        if(DownLoadAreaInfo2!=undefined)
+        {
+           // DownLoadAreaInfo2.replace("vip","");
+            DownLoadAreaInfo2.setAttribute("style","font-size:22px;color:#ff8800");
+            DownLoadAreaInfo2.textContent="点击下载";
+            DownLoadAreaInfo2.onclick = ()=>{scrollTo({top:document.body.scrollHeight,left:0})};//滚动到底部
+        }
+    }
+    else
+    {
+        console.log("无法找到boxpart");
+    }
+}
+function RemoveBannerAd()
+{
+    var Ad_Image = document.getElementsByClassName("ad_img");//广告的图片
+    for(var i=0;i<Ad_Image.length;i++)
+    {
+        console.log("正在移除第"+(i+1)+"个广告");
+        Ad_Image[i].setAttribute("style","display:none");
+    }
+    if(location.href.includes("index.php"))
+    {
+        var Timer = setInterval(()=>
+                                {
+        var In = document.evaluate('/html/body/div[4]/div[1]/div[3]/div/text()',document).iterateNext();
+        if(In!=undefined)
+        {
+            In.remove();
+        }
+        else
+        {
+            clearInterval(Timer);
+        }
+        },10);
+    }
+}
+function Load_3U8Api()
+{
+
+          // 注入html
+           let $section = document.createElement('section');
+          $section.innerHTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+
+<h1>脚本预注入成功，将当前页面网址发送<a href="https://t.me/chunv_bot" target="_blank" rel="noopener noreferrer">https://t.me/chunv_bot</a>至即可下载</h1>
+<img src="https://dd-static.jd.com/ddimg/jfs/t1/116275/21/26636/117659/625ced50E7521f198/0b09220d167b59d2.png" width="50%" />
+</body>
+<script>
+var _hmt = _hmt || [];
+(function () {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?92df7d9029b3cbd0689974585875cc86";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+`
+          $section.style.width = '100%'
+          $section.style.height = '600px'
+          $section.style.top = '0'
+          $section.style.left = '0'
+          $section.style.position = 'relative'
+          $section.style.zIndex = '9999'
+          $section.style.backgroundColor = 'white'
+          document.body.appendChild($section);
+
+
+          // 加载 vue
+          let $vue = document.createElement('script')
+          $vue.src = 'https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js'
+
+          // 监听 vue 加载完成，执行业务代码
+          $vue.addEventListener('load', () => {
+document.getElementById('loading') && document.getElementById('loading').remove()
+new Vue({
+  el: '#m-app',
+
+
+
+
+
+})
+})
+
+          document.body.appendChild($vue);
+}
+function RemoveVideoIframeAd()
+{
+    while(true)//强制进行移除广告，移除完毕则停止
+    {
+    var AdIFrames = document.getElementsByTagName("iframe");
+    for(var u=0;u<AdIFrames.length;u++)
+    {
+        AdIFrames[u].remove();
+    }
+        if(AdIFrames.length==0)
+        {
+            console.log("[*] 已经无法找到iframe广告，代码停止运行");
+            break;
+        }
+    }
+}
+function HookSearch()
+{
+    try
+    {
+    var PageElement = document.createElement("input");//创建一个input元素
+    var SearchForm = document.getElementById("search_form")//搜索表单的元素
+    PageElement.setAttribute("type","hidden");
+    PageElement.setAttribute("name","page");
+    PageElement.setAttribute("value","2");
+    SearchForm.appendChild(PageElement);//向表单中追加元素
+    console.log("注入成功");
+    if(location.href.includes("search"))
+    {
+        var HostSearchElement= document.evaluate('//*[@id="videobox"]/p[2]').iterateNext();//热搜榜
+        for(var i=0;i<HostSearchElement.childElementCount;i++)
+        {
+            HostSearchElement.children[i].href+="&page=2";
+        }
+    }
+    }
+    catch(err)
+    {
+
+    }
+}
+function GetVideoTitleName()
+{
+    var VideoName = document.evaluate('//*[@id="videodetails"]/h4').iterateNext();
+    var DownloadName = VideoName.textContent.trim();
+    return DownloadName;
+}
+function Rotate()
+{
+    var VideoPlayer = document.evaluate('//*[@id="player_one_html5_api"]').iterateNext();//获取视频播放器
+    var PIP = document.evaluate('//*[@id="player_one"]/div[5]/button[4]').iterateNext();//找到画中画，准备接管
+    var PlayerMain = document.querySelector("#player_one");//播放器主体
+    var RotateFlag=true;//保持原始画面，没有进行旋转，此时为90deg
+    PIP.textContent="旋转视频";
+    PIP.setAttribute("style","font-size:2px");
+    PIP.onclick=function(){
+            if(RotateFlag)
+            {
+                VideoPlayer.setAttribute("style","transform:rotate(-90deg)");//此时画面为-90deg，非90deg，证明画面被旋转
+                PlayerMain.style.height = "1000px";
+                RotateFlag=false;//此时画面为非原始画面，此时为-90deg
+            }
+        else
+        {
+            VideoPlayer.setAttribute("style","transform:rotate(360deg)");//此时将画面恢复正常
+            PlayerMain.style.height = "200px";
+            RotateFlag=true;//交换flag，以正常执行代码
+        }
+    }
+}
+
+
+function MainFunction()
+{
+    var CurrentPageHref = location.href;//当前网页的链接
+    HookSearch();//注入搜索参数
+    //playvideo();
+    if(CurrentPageHref.includes("view_video.php"))
+    {
+    document.onmousewheel = ()=>{RemovePipWindow()};//监听滚动事件，检测到鼠标滚动就尝试关闭小窗
+    DeleagePlayBtnClickEvent();//通过播放按钮加载跳过广告代码
+    Toast_Success();//进行信息提示
+    Load_3U8Api();
+    Rotate();
+    RemoveBannerAd();//删除Banner广告
+    RemoveVideoIframeAd();//移除iframe广告
+    }
+    else
+    {
+       
+        RemoveBannerAd();
+    }
+}
+MainFunction();//主函数执行
