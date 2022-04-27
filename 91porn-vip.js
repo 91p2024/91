@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         91porn 解锁VIP观看高清下载搜索等限制,去除广告.正则版通杀所有
 // @name:en      91porn Unlock VIP watch HD download search and other restrictions, remove ads.
-// @namespace    https://greasyfork.org/scripts/444066
+// @namespace    https://greasyfork.org/scripts/444110
 // @version      0.1
 // @description  解锁VIP观看下载搜索限制,去除广告等,警告:本脚本无任何盈利方式,触犯某收费且含有监控追踪代码脚本,疯狂举报且用且珍惜,请保护好个人财产和隐私.
 // @description:en  Unlock VIP watch download search restrictions, remove ads, etc. Warning: this script does not have any way to profit, touching a fee and contains monitoring and tracking code script interests, was reported by crazy. Use and cherish, please protect personal property and privacy.
