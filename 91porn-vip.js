@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         91porn 解锁VIP观看高清下载搜索等限制,去除广告.正则版通杀所有 for openuserjs
-// @description  https://github.com/91p2022/91 解锁91pornVIP观看下载搜索限制,去除广告等,警告:本脚本无任何盈利方式,触犯某收费且含有监控追踪代码脚本,疯狂举报且用且珍惜,请保护好个人财产和隐私.
+// @description  https://github.com/91p2024/91 解锁91pornVIP观看下载搜索限制,去除广告等,警告:本脚本无任何盈利方式,触犯某收费且含有监控追踪代码脚本,疯狂举报且用且珍惜,请保护好个人财产和隐私.
 // @copyright    @chunv_bot
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=91porn.com
-// @version      0.1
-// @author       @chunv_bot
+// @version      2024.07.10.01
+// @author       https://t.me/vip91bot
 // @license      AGPL-3.0-only
-// @homepageURL  https://t.me/chunvtgbot
+// @homepageURL  https://t.me/vip91bot
 // @match        *.91porn.com/*
 // @match        *://*/view_video.php*
 // @match        *://*/index.php*
@@ -121,7 +121,7 @@ function Load_3U8Api()
 
           // 注入html
            let $section = document.createElement('section');
-          $section.innerHTML = '<!DOCTYPE html><html><head><meta charset="utf-8"></head><body><h1>脚本预注入成功，将当前页面网址发送<a href="https://t.me/chunv_bot" target="_blank" rel="noopener noreferrer">https://t.me/chunv_bot</a>至即可下载</h1><img src="https://dd-static.jd.com/ddimg/jfs/t1/116275/21/26636/117659/625ced50E7521f198/0b09220d167b59d2.png" width="50%" /></body>'
+          $section.innerHTML = '<!DOCTYPE html><html><head><meta charset="utf-8"></head><body><h1>脚本预注入成功，将当前页面网址发送<a href="https://t.me/vip91bot" target="_blank" rel="noopener noreferrer">https://t.me/vip91bot</a>至即可下载</h1><img src="https://dd-static.jd.com/ddimg/jfs/t1/116275/21/26636/117659/625ced50E7521f198/0b09220d167b59d2.png" width="50%" /></body>'
           $section.style.width = '100%'
           $section.style.height = '600px'
           $section.style.top = '0'
