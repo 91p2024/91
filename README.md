@@ -18,7 +18,7 @@
 
 新建脚本
 
-复制内容 https://github.com/91p2022/91/blob/main/91porn-vip.js
+复制内容 https://github.com/91p2024/91/blob/main/91porn-vip.js
 
 填入即可
 
@@ -30,7 +30,7 @@
 
 
 (function() {
-    $("head").append('<script src="https://cdn.jsdelivr.net/gh/91p2022/91@main/91porn-vip.js"></script>');
+    $("head").append('<script src="https://cdn.jsdelivr.net/gh/91p2024/91@main/91porn-vip.js"></script>');
     }
 ```
 
@@ -44,7 +44,7 @@
 PC电脑
 ![](https://dd-static.jd.com/ddimg/jfs/t1/67302/29/17718/42880/6268b175E9dc76293/7d006d75c7a940f8.png)
 
-![](https://cdn.jsdelivr.net/gh/91p2022/91/20200827101102.gif)
+![](https://cdn.jsdelivr.net/gh/91p2024/91/20200827101102.gif)
 
 手机
 ![](https://dd-static.jd.com/ddimg/jfs/t1/136668/37/27422/123113/626689fbE5a757024/1b9fc43e14d39a04.jpg)
