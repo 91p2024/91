@@ -8,7 +8,7 @@
 
 # 新建个了自用91精选|每日更新
 
-https://t.me/chunvall91
+https://t.me/viptop91
 
 # 安装教程
 
